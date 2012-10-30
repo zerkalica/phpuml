@@ -1,0 +1,8 @@
+{
+    "name": "zerkalica/phpuml",
+    "description": "Unofficial version of PHP_UML to be handled with Composer.",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "bin": ["bin/phpuml"]
+}

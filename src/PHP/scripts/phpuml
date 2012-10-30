@@ -1,0 +1,118 @@
+<?php
+/**
+ * PHP Parser and UML/XMI generator. Reverse-engineering tool.
+ *
+ * A package to scan PHP files and directories, and get an UML/XMI representation
+ * of the parsed code.
+ *
+ * PHP version 5
+ *
+ * @category PHP
+ * @package  PHP_UML
+ * @author   Baptiste AUTIN <ohlesbeauxjours@yahoo.fr>
+ * @author   David JEAN LOUIS <izi@php.net>
+ * @author   Karsten DAMBEKALNS
+ * @license  http://www.gnu.org/licenses/lgpl.html LGPL License 3
+ * @version  SVN: $Revision: 179 $
+ * @link     http://pear.php.net/package/PHP_UML
+ * @link     http://www.baptisteautin.com/projects/PHP_UML/
+ * @since    $Date: 2011-09-19 16:09:54 +0200 (lun., 19 sept. 2011) $
+ */
+
+/**
+ * We depend on Console_CommandLine to do the job.
+ */
+require_once 'Console/CommandLine.php';
+require_once 'PHP/UML.php';
+
+// Build our parser
+
+if (is_dir('@data_dir@/PHP_UML')) {
+    $xmlfile = '@data_dir@/PHP_UML/data/phpuml.xml';
+} else {
+    // case when the package was not installed with pear
+    $xmlfile = dirname(__FILE__) . '/../data/phpuml.xml'; 
+}
+$parser = Console_CommandLine::fromXMLFile($xmlfile);
+
+$parser->renderer->line_width = 80;
+
+try {
+    $result = $parser->parse();
+    
+    $output     = $result->options['output'];
+    $version    = $result->options['xmiversion'];
+    $modelName  = $result->options['modelname'];
+    $encoding   = $result->options['encoding'];
+    $errorLevel = $result->options['errorLevel'];
+    
+    if (empty($result->args['input'])) {
+        echo "No output folder given. Please specify it with the -o switch.";
+        $parser->displayUsage();
+    }
+
+} catch (Exception $exc) {
+    $parser->displayError($exc->getMessage());
+}
+
+
+try {
+    $uml = new PHP_UML();
+
+    foreach ($result->args['input'] as $item) {
+        $uml->setInput($item);
+        if (strtolower(substr($item, -4)) == '.xmi') {
+            $uml->setImporter(new PHP_UML_Input_XMI_FileScanner());
+        }
+    }
+
+    $uml->deploymentView = $result->options['deploymentview'];
+    $uml->componentView  = $result->options['componentview'];
+    $uml->dollar         = $result->options['dollar'];
+    $uml->docblocks      = $result->options['docblocks'];
+    $uml->onlyApi        = $result->options['onlyApi'];
+    $uml->showInternal   = $result->options['showInternal'];
+    $uml->pureObject     = $result->options['pureObject'];
+
+    if ($result->options['match'] !== null) {
+        $uml->setMatchPatterns($result->options['match']);
+    }
+    if ($result->options['ignore'] !== null) {
+        $uml->setIgnorePatterns($result->options['ignore']);
+    }
+
+    PHP_UML_Warning::clear();
+    
+    $uml->parse($modelName);
+    
+    $e = PHP_UML_Output_Exporter::getInstance($result->options['format']);
+    $e->setModel($uml->getModel());
+    
+    if ($e instanceof PHP_UML_Output_Xmi_Exporter) {
+        $e->setEncoding($encoding);
+        $e->setXmiVersion($version);
+        $e->setLogicalView($uml->logicalView);
+        $e->setComponentView($uml->componentView);
+        $e->setDeploymentView($uml->deploymentView);
+        $e->setStereotypes($uml->docblocks);
+    }
+        
+    if (empty($output)) {
+        if ($e instanceof PHP_UML_Output_Xmi_Exporter) {
+            echo $e->export($output);
+        }
+    } else {
+        $e->export($output);
+    }
+
+    if ($errorLevel>1) {
+        foreach (PHP_UML_Warning::$stack as $msg) {
+            echo $msg."\n";
+        }
+    }
+
+} catch (Exception $exc) {
+    if ($errorLevel>0)
+        $parser->displayError($exc->getMessage());
+}
+?>

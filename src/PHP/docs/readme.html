@@ -1,0 +1,368 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+		<title>PHP_UML - Readme File</title>
+		<style>
+			html {
+				font-family: Arial, Verdana;
+				font-size:80%;
+				line-height:140%;
+			}
+			h1, h2, h3 {
+				color:#006600;
+			}
+			code {
+				color: #404040;
+				font-weight:bold;
+				font-size:120%;
+			}
+			pre {
+				font-size:105%;
+			}
+			
+			h4, h5 {
+				color:#505050;
+				margin-bottom:0px;
+				padding-bottom:0px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>PEAR\PHP_UML</h1>
+		<h2>Tutorial</h2>
+		<h5>Baptiste Autin, December 13th, 2009, updated September, the 7th, 2011</h5>
+
+	<h3>INTRODUCTION</h3>
+
+<p><a href="http://pear.php.net/package/PHP_UML">PHP_UML</a> is a PHP parser, an XMI generator and an API documentation tool.<br/>
+Practically, with PHP_UML, you will be able to feed a UML CASE tool, like Rational Rose or Argouml, with a UML representation of existing PHP source code.
+This way, you get an instant overview of a PHP application, with all the usual functions of a software design tool (such as class diagrams exportation,
+refactoring of object-oriented applications, or automatic code generation...)</p>
+
+<p>PHP_UML:
+	<ul>
+		<li>Can generate UML/XMI files in version 1.4, or in version 2.1 (logical, component, and deployment views)</li>
+		<li>Can generate an API documentation in HTML format</li>
+		<li>Can generate PHP code (code skeleton) from a given XMI file</li>
+	</ul>
+</p>
+
+<p>PHP_UML:
+	<ul>
+		<li>Parses PHP code, in all versions (classes, interfaces, functions, properties...)</li>
+		<li>Interprets the PHP namespacing instructions (<code>namespace</code> and <code>use</code>)</li>
+		<li>Parses the docblock comments: class (@package), function (@param and @return), property (@var) and header file comments (@package)</li>
+		<li>Detects types as much as possible (by parsing the type hints, and by analyzing the default values)</li>
+		<li>From version 1.5, PHP_UML can parse procedural code too (functions and constants). See below the "htmlnew" format</li>
+	</ul>
+</p>
+
+<p>PHP_UML generates a logical view (the packages and the classes found), a deployment view (that maps the filesystem that has been scanned), and a component view.</p>
+
+<p>See <a href="SOFTWARES_TO_USE_WITH_PHP_UML">SOFTWARES_TO_USE_WITH_PHP_UML</a> for an overview of the existing UML softwares.</p>
+
+
+<h3>THE COMMAND LINE TOOL "phpuml"</h3>
+
+<p>If you have installed PHP_UML with the PEAR install process, you should be able to use PHP_UML directly from the command line.</p>
+
+<p>Type <code>phpuml -h</code> to get a list of all available commands.</p>
+
+<p>To specify the PHP files/directories to scan, pass them as main arguments.<br/>
+Eg. <code>phpuml G:\Inetpub</code> parses recursively the directory "G:\Inetpub"<br/>
+Eg. <code>phpuml index1.php index2.php</code> parses the files "index1.php" and "index2.php"</p>
+
+<p>By default, phpuml will generate the XMI code in version UML 2, and will redirect it to the screen.<br/>
+To save it to a file, specify the output folder with the option -o<br/>
+Eg. <code>phpuml G:\Inetpub -o .</code> scans "G:\Inetpub", and saves the XMI code to a file "default.xmi" in the current directory (.)<br/>
+You can also specify a file name, instead of a directory path: "-o foo.xmi"</p>
+
+<p>Note that you can also use the redirection operator:<br/>
+Eg. <code>phpuml G:\Inetpub > test.xmi</code> scans "G:\Inetpub", and saves the XMI code to a file "text.xmi"</p>
+
+<p>To get UML/XMI in version 1.x of XMI, use the option -x<br/>
+Eg. <code>phpuml G:\Inetpub -x 1 -o G:\tmp</code> scans "G:\Inetpub", and saves the XMI code in version 1 to a file "G:\tmp\default.xmi"</p>
+
+<p>With the option -n, you can name your model name (= give a name to the UML root package).<br/>
+Since PHP_UML saves to a file named after the model name, the following command will save the XMI to a file called "foo.xmi":<br/>
+Eg. <code>phpuml G:\Inetpub -o . -n foo</code>
+</p>
+
+<p>In addition to "xmi", 3 output formats are also available: "html", "htmlnew", and "php"
+	<ul>
+		<li><b>htmlnew</b> is a full XHTML-compliant API documentation (modern look and feel)</li>
+		<li><b>html</b> is another HTML API documentation (<a href="http://java.sun.com/j2se/javadoc/reference/docs/">Javadoc</a> look and feel)</li>
+		<li><b>php</b> is a PHP code generation (code skeletons)</li>
+	</ul>
+	Use the option -f to specify which format phpuml should generate.<br/>
+	Eg. <code>phpuml G:\Inetpub -f html -o G:\Inetpub\api</code> scans recursively the directory "G:\Inetpub", and creates an HTML documentation in "G:\Inetpub\api"
+</p>
+
+<p>
+If you need to provide your own XMI file, instead of parsing some existing files, simply pass it as an argument.<br/>
+Eg. <code>phpuml myFile.xmi -f php -o G:\Inetpub\Foo</code> reads the XMI code contained in "myFile.xmi", and generates the PHP code templates in "G:\Inetpub\Foo"</p>
+
+<p>Note that, if you read an XMI file in UML/XMI version 1.x, the content will be automatically converted to version 2.1<br/>
+This provides an interesting way to convert XMI files from version 1 to 2:<br/>
+Eg. <code>phpuml foo1.xmi -o foo2.xmi</code> reads "foo1.xmi", and, if its XMI content is in version 1, converts it to version 2, and stores it in "foo2.xmi"
+</p>
+
+<p>The option <code>-errorLevel</code> is used to specify the error reporting level (0 for silent process, 1 for the exceptions (default), 2 for the exceptions and all the warnings (in particular, PHP_UML will raise a warning every time it cannot resolve a type)</p>
+
+<p>But instead of using the command-line tool "phpuml", you can also use PHP_UML programmatically, through its public API.
+The following points explains how you can do that.</p>
+
+<h3>OVERVIEW OF THE API</h3>
+
+<ul><li>
+<h4>The helper method <code>PHP_UML::export($format, $location)</code></h4>
+<code>
+<pre>
+$uml = new PHP_UML();
+$uml->setInput('test1.php');
+$uml->parse();
+$uml->export('xmi', 'test_example1.xmi');
+</pre>
+</code>
+
+<p>Check "examples/test_to_run.php", or the <a href="http://pear.php.net/manual/en/package.php.php-uml.php">online documentation</a> for more examples.</p>
+</li>
+
+<li><h4>The classes <code>Importer</code> and <code>Exporter</code></h4>
+
+<p>Using directly the <code>Importer</code> and <code>Exporter</code> classes allows for more flexibility and configuration settings.<br/>
+First, let's create a PHP_UML object:<br/>
+<code>$uml = new PHP_UML();</code>
+</p>
+
+<p>To specify which files are going to be parsed, we are going to invoke <code>setInput()</code> as usual:<br/>
+<code>$uml->setInput($elements);</code><br/>
+$elements being a string containing one or more files and/or directories (separated by a comma), or an array of files/directories</p>
+
+<p>By default, PHP_UML relies on a <code>PHP_UML_Input_PHP_FileScanner</code> to import the data, which means that it will parse the content of the
+files as PHP content.<br/>
+If you want to import one or several XMI files (rather than PHP) into the model, provide PHP_UML with a <code>PHP_UML_Input_XMI_FileScanner</code> object:<br/>
+<code>$uml->setImporter(new PHP_UML_Input_XMI_FileScanner());</code></p>
+
+<p>
+Then we can parse:<br/>
+<code>$uml->parse();</code><br/>
+This parses the files and/or directories previously specified with the methods <code>setInput</code>, <code>setFiles</code> or
+<code>setDirectories</code>, and build the UML model in memory.</p>
+
+<p>Once the parsing is done, we have to give <code>PHP_UML</code> an implementation of the class <code>PHP_UML_Output_Exporter</code>.<br/>
+By default, PHP_UML uses a <code>PHP_UML_Output_Xmi_Exporter</code>, configured for XMI generation in version 2.<br/>
+Similarly to what we did with the <code>Importer</code> object, we can provide our own instance like this:<br/>
+<code>$uml->setExporter(new PHP_UML_Output_Html_Exporter());</code></p>
+
+<p>But this is not very useful, since we could have called directly the helper method <code>export($format, $location)</code> on <code>$uml</code> itself:<br/>
+<code>$uml->export('html', 'doc2/');</code><br/>
+(an instance of <code>PHP_UML_Output_Html_Exporter</code> is then created in the background)</p>
+
+<p>On the other hand, what is useful to do is this:<br/>
+<code>$exporter = new PHP_UML_Output_Xmi_Exporter();<br/>
+$exporter->setModel($uml->getModel());<br/>
+$exporter->setXmiVersion(1);<br/>
+$exporter->setEncoding('utf-8');<br/>
+$exporter->setDeploymentView(true);<br/>
+$exporter->setComponentView(false);<br/>
+$exporter->export('./');</code></p>
+
+<p>This time, we have called the method <code>export($location)</code> on the <code>Exporter</code> implementation. Note how we passed
+the UML model from the <code>PHP_UML</code> object to the <code>Exporter</code> object with the methods setModel() and getModel().</p>
+
+<p>It is perfectly possible, by the way, not to use at all <code>PHP_UML</code> (which is just a facade) by transfering the model from the Importer to the Exporter like this:<br/>
+
+<code>$importer = new PHP_UML_Input_PHP_FileScanner();<br/>
+$importer->setDirectories(array('somewhere/'));<br/>
+$importer->import();<br/><br/>
+
+$exporter = new PHP_UML_Output_Xmi_Exporter();<br/>
+$exporter->setModel($importer->getModel());<br/>
+$exporter->setDeploymentView(true);<br/>
+$exporter->setComponentView(true);<br/>
+$exporter->export('somewhere/else/');</code></p>
+
+<p><br/></p>
+
+<p>As we said earlier, by using an implementation of Exporter instead of calling <code>export($format, $location)</code>, you gain access to more settings. For example, you can
+set the XMI version :<br/>
+- <code>$exporter->setXmiVersion($version)</code> for UML/XMI version (1 or 2)<br/>
+- <code>$exporter->setEncoding($encoding)</code> for the XML encoding. Note that PHP_UML just sets the attribute "encoding" of the XML header with this value. It does not convert to the specified encoding by itself, except for UTF-8.<br/>
+The XMI file will be in version 2.1 and in ISO-8859-1 encoding if you don't explicitely set these informations.</p>
+
+<p>Besides, if you need to get the XMI code as a string (instead of exporting it to a file), use the <code>getXmiDocument()</code> method:<br/>
+<code>$exporter->getXmiDocument()->dump();</code></p>
+
+</li></ul>
+
+<h4>Output formats</h4>
+<p>In addition to XMI, three output formats are available: "Html" and "HtmlNew" for HTML API documentations, and "Php" for a PHP code generation.<br/>
+An experimental "Eclipse" format also exists.</p>
+
+<p>Use the helper method <code>export($format, $location)</code> if the default settings suit your needs:<br/>
+<code>
+$uml->setInput('/var/www/');<br/>
+$uml->export('Html', '/var/api/');<br/>
+</code><br/>
+...or use the various Exporter implementations: <code>PHP_UML_Output_Html_Exporter</code>, <code>PHP_UML_Output_HtmlNew_Exporter</code>,
+<code>PHP_UML_Output_Php_Exporter</code>, <code>PHP_UML_Output_Eclipse_Exporter</code>.
+</p>
+
+<h4>Errors</h4>
+<p><code>PHP_UML_Warning::$stack;</code><br/>
+$stack is an array of (potential) warnings raised during parsing</p>
+
+
+
+<p>See also "examples/test_with_api.php" for an example of XMI generation without using the PHP parser.</p>
+
+<h3>OPTIONS</h3>
+
+<p>
+<code>$uml->setMatchPatterns($patterns);</code><br/>
+$patterns: a string containing one or several file patterns (with the wildcards ? and *).<br/>
+For example, if you need to parse only the files with the extension .php or .php5, insert this command before starting the parser:<br/>
+<code>$uml->setMatchPatterns('*.php, *.php5');</code>
+By default, PHP_UML parses ONLY *.php files!</p>
+
+<p>
+<code>$uml->setIgnorePatterns($patterns);</code><br/>
+- $patterns: a string containing one or several file patterns (with the wildcards ? and *)<br/>
+For example, if you need to ignore all directories starting by a dot (like the Subversion folders for instance):<br/>
+<code>$uml->setIgnorePatterns('.*');</code></p>
+
+<p><code>$uml->logicalView = true;</code><br/>
+- If true (the default), PHP_UML will include a logical view in the XMI code.<br/>
+A logical view is what you will probably look for first. It is constituted of all the UML classes, interfaces, packages, methods, attributes...
+that the parser will have found in your PHP code.</p>
+
+<p><code>$uml->deploymentView = true;</code><br/>
+- If true, PHP_UML will include a "Deployment view" in the XMI code, in addition to the logical view.<br/>
+In a deployment view, each file is represented by a UML Artifact, each physical folder by a package, and the whole is stored
+in a package called "Deployment view".<br/>
+In UML2-aware tools, a "manifestation" should automatically be created between a class and its corresponding source artifact,
+so that you know in which file a class/interface was defined.</p>
+
+<p><code>$uml->componentView = true;</code><br/>
+- If true, PHP_UML will include a "Component view" in the XMI code.<br/>
+In UML/XMI version 1, a component view is a set of UML Subsystems (one for each folder)<br/>
+In UML/XMI version 2, a component view is a set of UML Components:<br/>
+Each PHP file is represented by a component, linked to the logical classes/interfaces that it contains.<br/>
+Each physical folder is also a component, and all the elements are nested in each other, like they are in the filesystem.<br/>
+Note that the structure of this "component view" could change a little bit in the future.<br/>
+If you have any idea/opinion about what a component view should be, in a reverse-engineering perspective, your feedback is welcomed.</p>
+
+<p><code>$uml->dollar = true;</code><br/>
+- If true, the symbol $ is kept along with the variable names</p>
+
+<p><code>$uml->docblocks = true;</code><br/>
+- If true, docblocks are parsed (@package, @param, @return...)<br/>
+Note that disabling this option might change a lot the structure of your code, because the information contained in a docblock like
+@package has a great influence on the structure of the namespaces/packages.<br/>
+If you disable that option, all the type hints contained in the docblock @param will not be retrieved either.</p>
+
+<p><code>$uml->onlyAPI = false;</code><br/>
+- If true, only the elements (classes, functions, properties) whose docblocks explicitly contain an "@api" are included in the final API. Otherwise, they are ignored.<br/>
+By default, that option is not set.<br/>
+Note that, if you need to exclude one particular element of the API, you can also add the docblock "@internal" to its docblocks.</p>
+
+<p><code>$uml->showInternal = false;</code><br/>
+- By default, PHP_UML discards all the elements (classes, functions, properties) with a docblock "@internal".<br/>
+If you need to have them included, set this option to true.<br/>
+Note that, in case of a conflict between "showInternal" and "onlyAPI" on a particular element, PHP_UML will skip the element.</p>
+
+<p><code>$uml->pureObject = false</code><br/>
+- Although this is not very UML style, PHP_UML can parse procedural code. The export format "htmlnew" is currently the only format to benefit from this new capability (the XMI format cannot, since it is a strict object-oriented XML vocabulary).<br/>
+Set this option to true if you want the parser to discard all procedural elements.</p>
+
+
+
+<h3>PACKAGES AND NAMESPACES</h3>
+
+<p>First, a little bit about packages...</p>
+
+<p>In UML, a package is just a container. It contains typed elements, or other packages. <i>Typed elements</i> means datatypes, classes, interfaces...<br/>
+UML, by itself, does not say how you should name and organize your packages (this is your business) but it is likely that you will want to define
+them according to logical rules.<br/>
+For example, in PHP_UML, the classes that build the XMI code are gathered in a package named "XMI", while the PHP parser is put into a different package.<br/>
+No matter the filesystem, which is a different matter.</p>
+
+<p>From version 5.3, PHP has introduced the concept of <i>namespace</i>, which is intended to avoid name conflicts between class names.
+The namespace is a very general notion.</p>
+
+<p>In UML, a <i>package</i> is always a <i>namespace</i> for its members.</p>
+
+
+<h3>PHP_UML AND NAMESPACES</h3>
+
+<p>Since packages are so important in UML and OO development, PHP_UML tries to use them as much as possible.</p>
+
+<p>First, PHP_UML can read docblock comments.<br/>
+So you can specify the package of a class by inserting a "@package Foo" in the class comment.<br/>
+PHP_UML can also read file docblocks, which means that all the classes defined in a file whose main comment contains a "@package Foo" will be considered
+as belonging to the package "Foo".</p>
+
+<p>Then, PHP_UML interprets the namespacing instructions: <code>namespace</code> and <code>use</code>.<br/>
+Once the parser has found something like, say, <code>namespace PEAR\PHP\PHP_UML;</code>, it considers every further class as belonging to
+a package called "PHP_UML", belonging to a package called "PHP", belonging itself to a package called "PEAR".<br/>
+In short, the hierarchy of the UML packages is matching the hierarchy of the PHP namespaces.</p>
+
+<p>And what about classes that are not docblock-commented and that are not preceded by a "namespace" instruction?<br/>
+They are simply put into the "default" (or root) package of your UML model. PHP_UML considers that this root package is also the "global namespace" of the PHP language.</p>
+
+<h4>Last thing to know about packages...</h4>
+
+<p>PHP_UML does not parse the "require" or "include" instructions in the files it scans,
+and this may lead to unwanted results, especially if you use the docblock @package to define the package of your classes.<br/>
+Take that class:</p>
+
+<code>
+<pre>
+/**
+ * @package A
+ */
+Class Foo
+{
+    function foo(Foobar $x) {
+    }
+}
+</pre>
+</code>
+
+<p>And here's Foobar:</p>
+
+<code>
+<pre>
+/**
+ * @package B
+ */
+Class Foobar() {
+}
+</pre>
+</code>
+
+<p>Since it is defined in package B (mind the docblock!), PHP_UML cannot resolve correctly the declared type <code>Foobar</code> in the signature of the function <code>foo()</code>.<br/>
+... unless <code>foo()</code> is modified like this:<br/>
+ <code>
+ <pre>
+ function foo(\B\Foobar $x) {
+ }
+ </pre>
+ </code>
+... but that kind of writing is possible only in namespaced PHP.<br/>
+So we recommend you to always use the PHP namespace instructions, rather than the docblocks @package.</p>
+
+<h3>XMI COMPATIBILITY</h3>
+        
+<p>Your XMI code might be interpreted differently by the modeling tool you are going to use along with PHP_UML.<br/>
+This is particularly true for the version 2 of XMI.<br/>
+For instance, the Eclipse plug-ins (EMF, Papyrus) only accept a particular flavour of XMI, called "ecore",
+which is only partly compatible with the one you will get with PHP_UML.</p>
+
+<p>PHP_UML does not aim at implementing the whole UML specification, but instead it is designed to reverse-engineer PHP to UML,
+in a quick and simple way.</p>
+
+<p>Read the file: <a href="SOFTWARES_TO_USE_WITH_PHP_UML">SOFTWARES_TO_USE_WITH_PHP_UML</a>, for more information about the compatible apps, and to learn how to import your XMI code into Eclipse.</p>
+</body>
+</html>

@@ -1,0 +1,78 @@
+****************************************
+*                                      *
+*          PEAR Package PHP_UML        *
+*                                      *
+*          Logiciels à utiliser        *
+*              avec PHP_UML            *
+*              (mars 2008)             *
+*                                      *
+****************************************
+       
+         
+MOF/UML/XMI sont des standards complexes, ses versions 1 et 2 sont très différentes, et l'intérprétation du XMI ne sera donc peut-être pas la même selon le logiciel que vous utiliserez pour importer le code XMI produit par PHP_UML.
+Il vous faudra peut-être désactiver certaines options de parsing pour que l'importation fonctionne correctement.
+
+- ArgoUML
+http://argouml.tigris.org/
+OPEN SOURCE
+Version UML   : 1
+Note : L'un des plus souples, mais il faut aimer le design...
+Compatibilité : A l'heure actuelle, n'accepte que la version 1 d'UML.
+Importe bien les artefacts dans les packages de classe, le système de fichiers en composants dans une vue de composants.
+
+
+
+- Bouml :
+http://bouml.free.fr/
+OPEN SOURCE
+Version UML   : 2.1
+Note : Excellente qualité du graphisme, bonnes performances.
+Compatibilité : N'importe que la version 2 de XMI. On trouvera les artefacts dans une vue de déploiement, le nom du fichier en commentaire de classe, et l'ensemble des fichiers visités dans une vue de composant.
+Mais bug dans Bouml actuellement (pas de composition des sous-systèmes).
+
+
+- Umbrello
+http://uml.sourceforge.net/index.php
+OPEN SOURCE
+Version UML   : 1
+Note : un outil pour Linux (KDE).
+Compatibilité : il faut désactiver l'inclusion du tag filename : $t->$tagFilename = false;
+(Umbrello n'aime pas les tagged values)
+
+
+- Eclipse / Papyrus
+http://www.papyrusuml.org/
+OPEN SOURCE
+Version UML   : 2.1
+Note : pas le plus rapide, ne peut pas exporter des diagrammes ni générer du code sans d'autres plugins... mais c'est un plug-in Eclipse !
+Compatibilité : Papyrus fonctionne avec une version particulière de XMI2 (ecore), mais il est néanmoins possible d'importer le XMI produit par PHP_UML de la manière suivante :
+1. Créez un modèle vierge dans Papyrus
+2. Sauvergardez-le
+3. Papyrus a créé deux fichiers sur le disque : l'un portant l'extension .di2 (celui à ouvrir ensuite dans Papyrus), et l'autre avec l'extension .uml (contenant les définitions UML, requises par xxx.di2)
+3. Copiez le code XMI que vous avez généré avec PHP_UML SANS l'élement racine "uml:Model", et copiez le dans votre fichier file xxx.uml, à l'intérieur de son propre tag "uml:Model"
+4. Ouvrez xxx.di2
+5. Vous devriez voir vos élements UML dans votre arbre d'objets UML
+Attention : Papyrus est assez délicat avec les références non-résolues (qui se produisent si vous parsez du PHP contenant des classes/interfaces qui ne sont pas définies, ou qu'ils le sont de façon interne, commme Iterator or DomDocument...)
+
+
+- Protégé (éditeur d'ontologies)
+http://protege.stanford.edu/
+Version UML   : 1
+OPEN SOURCE
+Comme avec Papyrus, l'importation ne fonctionnera que si TOUTES les références sont correctes.
+Exemple d'erreur : une classe A (fournie) dérivant d'une classe B (non fournie).
+
+
+- Poséïdon
+http://www.gentleware.com/products.html
+PROPRIETARY
+Non testé.
+
+
+- Rational Rose
+http://www-306.ibm.com/software/awdtools/developer/rose/index.html
+PROPRIETARY
+Note : LA référence UML.
+Compatibilité : pas d'artefacts dans les packages de classe.
+La tagged value "src_path" avec le nom du fichier PHP d'origine est correctement ajoutée aux classes/interfaces.
+Importe correctement le système de fichiers dans une vue de composants/sous-systèmes.

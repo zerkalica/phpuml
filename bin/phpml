@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+call_user_func(function() {
+
+    $root = dirname(__DIR__) . '/src';
+
+    $paths = array(
+        $root,
+        $root . '/console-commandline',
+    );
+
+    $paths[] = get_include_path();
+    set_include_path(implode(PATH_SEPARATOR, $paths));
+});
+
+
+include( __DIR__ . '/../src/PHP/scripts/phpuml');

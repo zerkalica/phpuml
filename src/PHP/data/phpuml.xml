@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<command>
+    <description>
+    <![CDATA[
+A reverse-engineering package that scans PHP files and directories,
+and delivers an UML/XMI representation of the code.
+    ]]>
+    </description>
+    <!-- will be automagically replaced by pear package command -->
+    <version>1.6.1</version>
+
+    <argument name="input">
+        <description>The PHP file(s) or directorie(s) to parse (eg: D:/htdocs/)
+Use a space to separate the different entries.
+By default, PHP_UML parses the current directory.
+        
+Example 1: phpuml D:/htdocs/
+PHP_UML will recursively parse D:/htdocs/, and display the XMI code.
+
+Example 2: phpuml /var/www/test -o /tmp -x 1 -n Foo -m *.php6 -i .svn 
+PHP_UML will recursively parse /var/www/test, keeping only the php6 files, and excluding the svn folders; the UML model will be named "Foo", and the generated XMI file, in version 1, will be saved to "/tmp/Foo.xmi"
+        </description>
+        <multiple>true</multiple>
+    </argument>
+
+    <option name="output">
+        <short_name>-o</short_name>
+        <description>Output directory path, or filename (if not provided, the XMI code is printed on screen)
+        </description>
+        <action>StoreString</action>
+        <help_name>directory</help_name>
+    </option>
+    <option name="format">
+        <short_name>-f</short_name>
+        <long_name>--format</long_name>
+        <description>Output format: "xmi" (default), "html", "htmlnew", "php"
+For html/htmlnew/php, if you want to provide your own XMI file, pass it as argument to phpuml</description>
+        <action>StoreString</action>
+        <help_name>format</help_name>
+        <default>xmi</default>
+    </option>
+    <option name="xmiversion">
+        <short_name>-x</short_name>
+        <description>XMI version to generate (1 or 2)</description>
+        <action>StoreFloat</action>
+        <help_name>XMI version</help_name>
+        <default>2.1</default>
+    </option>
+    <option name="modelname">
+        <short_name>-n</short_name>
+        <description>Name of the generated UML model</description>
+        <action>StoreString</action>
+        <help_name>name</help_name>
+        <default>default</default>
+    </option>
+    <option name="encoding">
+        <short_name>-e</short_name>
+        <description>Output character encoding</description>
+        <action>StoreString</action>
+        <default>iso-8859-1</default>
+    </option>
+    <option name="deploymentview">
+        <long_name>--no-deployment-view</long_name>
+        <description>Disable generation of deployment view</description>
+        <action>StoreFalse</action>
+        <default>true</default>
+    </option>
+    <option name="componentview">
+        <long_name>--no-component-view</long_name>
+        <description>Disable generation of component view</description>
+        <action>StoreFalse</action>
+        <default>true</default>
+    </option>
+    <option name="dollar">
+        <long_name>--no-dollar</long_name>
+        <description>Remove the dollar symbol in variable names</description>
+        <action>StoreFalse</action>
+        <default>true</default>
+    </option>
+    <option name="docblocks">
+        <long_name>--no-docblocks</long_name>
+        <description>Disable docblocks parsing (@package, @param...)</description>
+        <action>StoreFalse</action>
+        <default>true</default>
+    </option>
+    <option name="showInternal">
+        <long_name>--show-internal</long_name>
+        <description>Include the elements marked with @internal</description>
+        <action>StoreTrue</action>
+        <default></default>
+    </option>
+    <option name="onlyApi">
+        <long_name>--only-api</long_name>
+        <description>Include only the elements marked with @api</description>
+        <action>StoreTrue</action>
+        <default></default>
+    </option>
+    <option name="ignore">
+        <short_name>-i</short_name>
+        <long_name>--ignore</long_name>
+        <description>Patterns/pathnames to ignore (example: .svn)</description>
+        <action>StoreArray</action>
+        <help_name>pattern</help_name>
+    </option>
+    <option name="match">
+        <short_name>-m</short_name>
+        <long_name>--match</long_name>
+        <description>Patterns to match (default is: *.php)</description>
+        <action>StoreArray</action>
+        <help_name>pattern</help_name>
+    </option>
+    <option name="errorLevel">
+        <long_name>--error-level</long_name>
+        <short_name>-l</short_name>
+        <description>Set the error reporting level (0 for silent mode, 1 for PHP errors and exceptions, 2 for all errors and warnings)</description>
+        <action>StoreFloat</action>
+        <default>1</default>
+    </option>
+    <option name="pureObject">
+        <long_name>--pure-object</long_name>
+        <description>Use this switch if you want PHP_UML to ignore all non object-oriented code</description>
+        <action>StoreTrue</action>
+    </option>
+</command>

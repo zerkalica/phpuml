@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Bouml" exporterVersion="1.10.1"/>
+	<uml:Model xmi:type="uml:Model" xmi:id="themodel" name="test">
+		<packagedElement xmi:type="uml:Package" xmi:id="BOUML_0x81_22" name ="test">
+			<packagedElement xmi:type="uml:AssociationClass" name="Produit" xmi:id="BOUML_0x1f40a_4" visibility="package" isAbstract="false" >
+				<memberEnd xmi:idref="BOUML_0x1f80a_0"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="BOUML_REVERSE_0x1f80a_0" association="BOUML_0x1f40a_4" visibility="private" type="BOUML_0x1f78a_4" aggregation="composite" isNavigable="false"/>
+				<memberEnd  xmi:idref="BOUML_REVERSE_0x1f80a_0"/>
+				<ownedComment xmi:type="uml:Comment" xmi:id="COMMENT_1" body="Classe générale pour les produits"/>
+				<ownedAttribute xmi:type="uml:Property" name="nom" xmi:id="BOUML_0x1f40a_1" visibility="protected">
+					<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="themes" xmi:id="BOUML_0x1f48a_0" visibility="private" association="BOUML_ASSOC_0x1f48a_0" aggregation="none">
+					<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f50a_4"/>
+					<lowerValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_L_0x1f48a_0" value="*"/>
+					<upperValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_U_0x1f48a_0" value="*"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="classifier" xmi:id="BOUML_0x1f60a_1" visibility="private" isStatic="true" isReadOnly="true">
+					<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" name="Livre" xmi:id="BOUML_0x1f48a_4" visibility="private" isAbstract="true" >
+				<generalization xmi:type="uml:Generalization" xmi:id="BOUML_0x1f40a_0" general="BOUML_0x1f40a_4"/>
+				<ownedAttribute xmi:type="uml:Property" name="editeur" xmi:id="BOUML_0x1f58a_1" visibility="private">
+					<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+					<ownedComment xmi:type="uml:Comment" xmi:id="COMMENT_2" body="Je mets un commentaire ici au sujet de l'éditeur, pour voir s'il est correctement repris dans la documentation."/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" name="Theme" xmi:id="BOUML_0x1f50a_4" visibility="package" isAbstract="false" >
+				<ownedAttribute xmi:type="uml:Property" name="libelle" xmi:id="BOUML_0x1f48a_1" visibility="public">
+					<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#String"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="identifiant" xmi:id="BOUML_0x1f50a_1" visibility="public" isReadOnly="true">
+					<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#Integer"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="" xmi:id="BOUML_0x1f50a_0" visibility="private" association="BOUML_ASSOC_0x1f48a_0" aggregation="composite">
+					<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f40a_4"/>
+					<lowerValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_L_0x1f50a_0" value="*"/>
+					<upperValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_U_0x1f50a_0" value="*"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" name="Client" xmi:id="BOUML_0x1f58a_4" visibility="package" isAbstract="false" >
+				<ownedOperation xmi:type="uml:Operation" name="achete" xmi:id="BOUML_0x1f40a_2" visibility="public" isAbstract="false">
+					<ownedComment xmi:type="uml:Comment" xmi:id="COMMENT_3" body="Action d'achat"/>
+					<ownedParameter xmi:type="uml:Parameter" name="p" xmi:id="BOUML_op_param_1" direction="in">
+						<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f40a_4"/>
+					</ownedParameter>
+					<ownedParameter xmi:type="uml:Parameter" name="r" xmi:id="BOUML_op_param_2" direction="out">
+						<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#Boolean"/>
+					</ownedParameter>
+				</ownedOperation>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Interface" name="IAchat" xmi:id="BOUML_0x1f60a_4" visibility="package" isAbstract="true" >
+				<ownedOperation xmi:type="uml:Operation" name="achat" xmi:id="BOUML_0x1f48a_2" visibility="public" isAbstract="false">
+					<ownedParameter name="return" xmi:id="BOUML_return_1" direction="return">
+						<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#Boolean"/>
+					</ownedParameter>
+					<ownedParameter xmi:type="uml:Parameter" name="p" xmi:id="BOUML_op_param_3" direction="in">
+						<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f40a_4"/>
+					</ownedParameter>
+					<ownedParameter xmi:type="uml:Parameter" name="r" xmi:id="BOUML_op_param_4" direction="out">
+						<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#Boolean"/>
+					</ownedParameter>
+				</ownedOperation>
+				<generalization xmi:type="uml:Generalization" xmi:id="BOUML_0x1f78a_0" general="BOUML_0x1f80a_4"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" name="File" xmi:id="BOUML_0x1f78a_4" visibility="package" isAbstract="false" >
+				<ownedAttribute xmi:type="uml:Property" name="client" xmi:id="BOUML_0x1f68a_1" visibility="private">
+					<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f58a_4"/>
+					<ownedRule xmi:type="uml:Constraint" xmi:id="BOUML_CONSTRAINT_0x1f68a_1" constrainedElement="BOUML_0x1f68a_1">
+						<specification xmi:type="uml:OpaqueExpression" xmi:id="BOUML_CSPEC_0x1f68a_1">
+							<body>Une petite contrainte</body>
+						</specification>
+					</ownedRule>
+					<ownedComment xmi:type="uml:Comment" xmi:id="COMMENT_4" body="Client pour lequel la facture a été établie&#10;(là j'ai sauté une ligne)"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="dossiersCibles" xmi:id="BOUML_0x1f70a_1" visibility="protected">
+					<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f70a_4"/>
+					<lowerValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_L_0x1f70a_1" value="1"/>
+					<upperValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_U_0x1f70a_1" value="*"/>
+					<ownedComment xmi:type="uml:Comment" xmi:id="COMMENT_5" body="Dossiers cibles (obligatoires)"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="ClassifierId" xmi:id="BOUML_0x1f78a_1" visibility="private" isStatic="true" isReadOnly="true">
+					<type xmi:type="uml:Class" xmi:idref="BOUML_datatype_0"/>
+					<defaultValue xmi:type="uml:LiteralString" xmi:id="BOUML_VALUE_0x1f78a_1" value="-45.254"/>
+				</ownedAttribute>
+				<ownedAttribute xmi:type="uml:Property" name="produitsAchetes" xmi:id="BOUML_0x1f80a_0" visibility="private" association="BOUML_0x1f40a_4" aggregation="none">
+					<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f40a_4"/>
+					<lowerValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_L_0x1f80a_0" value="*"/>
+					<upperValue xmi:type="uml:LiteralString" xmi:id="BOUML_MULTIPLICITY_U_0x1f80a_0" value="*"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" name="IAction" xmi:id="BOUML_0x1f80a_4" visibility="package" isAbstract="false" >
+			</packagedElement>
+			<packagedElement xmi:type="uml:Package" xmi:id="BOUML_0x1f40a_22" name ="Util">
+				<ownedComment xmi:type="uml:Comment" xmi:id="COMMENT_6" body="Paquetage utilitaire"/>
+				<packagedElement xmi:type="uml:Class" name="Facture" xmi:id="BOUML_0x1f68a_4" visibility="package" isAbstract="false" >
+					<ownedOperation xmi:type="uml:Operation" name="valorise" xmi:id="BOUML_0x1f50a_2" visibility="public" isAbstract="false">
+						<ownedParameter name="return" xmi:id="BOUML_return_2" direction="return">
+							<type xmi:type="uml:Class" xmi:idref="BOUML_datatype_1"/>
+						</ownedParameter>
+						<ownedParameter xmi:type="uml:Parameter" name="toto" xmi:id="BOUML_op_param_5" direction="in">
+							<type xmi:type="uml:Class" xmi:idref="BOUML_0x1f60a_4"/>
+						</ownedParameter>
+					</ownedOperation>
+					<ownedOperation xmi:type="uml:Operation" name="getId" xmi:id="BOUML_0x1f58a_2" visibility="public" isStatic="true" isAbstract="false">
+						<ownedParameter xmi:type="uml:Parameter" name="" xmi:id="BOUML_op_param_6" direction="out">
+							<type xmi:type="uml:PrimitiveType" href="http://schema.omg.org/spec/UML/2.1/uml.xml#Integer"/>
+						</ownedParameter>
+					</ownedOperation>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Class" name="Folder" xmi:id="BOUML_0x1f70a_4" visibility="public" isAbstract="false" >
+				</packagedElement>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="BOUML_ASSOC_0x1f48a_0" visibility="private">
+				<memberEnd xmi:idref="BOUML_0x1f48a_0"/>
+				<memberEnd xmi:idref="BOUML_0x1f50a_0"/>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Realization" xmi:id="BOUML_0x1f58a_0" client="BOUML_0x1f58a_4" supplier="BOUML_0x1f60a_4" realizingClassifier="BOUML_0x1f60a_4">
+			</packagedElement>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="BOUML_0x1f60a_0" client="BOUML_0x1f58a_4" supplier="BOUML_0x1f40a_4">
+			</packagedElement>
+		</packagedElement>
+		<packagedElement xmi:type="uml:DataType" xmi:id="BOUML_datatype_0" name="float"/>
+		<packagedElement xmi:type="uml:DataType" xmi:id="BOUML_datatype_1" name="void"/>
+	</uml:Model>
+</xmi:XMI>
