@@ -58,7 +58,7 @@ class PHP_UML_SimpleUID
         if (self::$deterministic)
             return self::PREFIX.self::$counter++;
         else
-            return uniqid();
+            return uniqid("", true);
     }
     
     /**
